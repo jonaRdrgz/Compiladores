@@ -47,7 +47,7 @@ void start() {
 	output = fopen (output_name,"w");
 	if (output!=NULL) {
 		tmp_data_segVa = tmpfile();
-		fprintf(tmp_data_segVa, "\naddress_of_return: return\n");
+		fprintf(tmp_data_segVa, "\naddress_of_return: .word return\n");
 		tmp_data_seg = tmpfile();
 		fprintf(tmp_data_seg, ".data\nreturn: .word 0\nformat: .asciz \"Se imprimio- %%d\\n\"\n");
 
@@ -64,7 +64,7 @@ void start() {
 void finish(){
 	/* Generate code to finish program */
 	fprintf(output,"pop {r4,lr}\n");
-	fprintf(output,"bx, lr\n");
+	fprintf(output,"bx lr\n");
 	fprintf(output,"\n");
 	long lSize;
 	char * buffer;
@@ -271,6 +271,12 @@ void read_id(expr_rec in_var){
 	fprintf(output, "ldr r0, addr_%s_scan\n", in_var.name);
 	fprintf(output, "ldr r1, addr_%s_num\n", in_var.name );
 	fprintf(output, "bl scanf\n");
+	fprintf(output, "ldr r0, addr_%s_num\n", in_var.name );
+	fprintf(output, "ldr r0,[r0]\n");
+	fprintf(output, "ldr r1,%s\n",in_var.nameAux);
+	fprintf(output, "str r0,[r1]\n");
+
+
 	fprintf(tmp_data_segVa,"addr_%s_scan: .word %s_scan\n",in_var.name ,in_var.name  );
 	fprintf(tmp_data_segVa,"addr_%s_num: .word %s_num\n",in_var.name , in_var.name );
 	fprintf(tmp_data_seg,"%s_scan: .asciz \"%%d\"\n", in_var.name);
@@ -282,7 +288,7 @@ void read_id(expr_rec in_var){
 expr_rec process_id(char* token){
 	expr_rec t;
 	char * zero_reg = malloc(sizeof(token+3));
-	sprintf(zero_reg, "Add%s", token);
+	sprintf(zero_reg, "addr_%s", token);
 
 	/*
 	 * Declare ID and build a
