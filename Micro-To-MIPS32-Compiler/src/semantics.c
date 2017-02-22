@@ -49,7 +49,7 @@ void start() {
 		tmp_data_segVa = tmpfile();
 		fprintf(tmp_data_segVa, "\naddress_of_return: return\n");
 		tmp_data_seg = tmpfile();
-		fprintf(tmp_data_seg, ".data\nreturn: .word 0\nformat: .asciz \"%%d\\n\"\n");
+		fprintf(tmp_data_seg, ".data\nreturn: .word 0\nformat: .asciz \"Se imprimio- %%d\\n\"\n");
 
 		fprintf(output, ".text\n");
 		fprintf(output, ".global main\n");
@@ -128,7 +128,8 @@ void assign(expr_rec target, expr_rec source_expr){
 		char* tmp_reg = get_temp();
 		if(!lookup(target.name)) {
 			enter(target.name);
-			fprintf(tmp_data_seg,"%s: .space %d\n", target.name, 4);
+			fprintf(tmp_data_segVa,"%s: .word %s\n", target.nameAux, target.name);
+			fprintf(tmp_data_seg,"%s: .word %d\n", target.name, 0);
 		}
 		fprintf(output, "lw %s, %s\n", tmp_reg, extract(source_expr));
 		fprintf(output, "sw %s, %s\n", tmp_reg, target.name);
@@ -137,7 +138,8 @@ void assign(expr_rec target, expr_rec source_expr){
 	if(source_expr.kind == TEMPEXPR && target.kind == IDEXPR){
 		if(!lookup(target.name)) {
 			enter(target.name);
-			fprintf(tmp_data_seg,"%s: .space %d\n", target.name, 4);
+			fprintf(tmp_data_segVa,"%s: .word %s\n", target.nameAux, target.name);
+			fprintf(tmp_data_seg,"%s: .word %d\n", target.name, 0);
 		}
 		expr_rec e_rec;
 		char* tmp = get_temp();
