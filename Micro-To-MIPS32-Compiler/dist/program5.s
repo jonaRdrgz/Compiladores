@@ -2,6 +2,13 @@
 .global main
 main:
 push {r4,lr}
+ldr r0, addr_var1_scan
+ldr r1, addr_var1_num
+bl scanf
+ldr r0, addr_var1_num
+ldr r0,[r0]
+ldr r1,addr_var1
+str r0,[r1]
 ldr r0, addr_var2_scan
 ldr r1, addr_var2_num
 bl scanf
@@ -43,6 +50,8 @@ bx lr
 address_of_return: .word return
 addr_var1: .word var1
 addr_var2: .word var2
+addr_var1_scan: .word var1_scan
+addr_var1_num: .word var1_num
 addr_var2_scan: .word var2_scan
 addr_var2_num: .word var2_num
 addr_var3: .word var3
@@ -52,6 +61,8 @@ return: .word 0
 format: .asciz "Se imprimio- %d\n"
 var1: .word 5
 var2: .word 0
+var1_scan: .asciz "%d"
+var1_num: .word 0
 var2_scan: .asciz "%d"
 var2_num: .word 0
 var3: .word 0

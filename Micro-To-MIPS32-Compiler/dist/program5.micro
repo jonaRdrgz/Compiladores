@@ -2,6 +2,7 @@
 begin
 	var1 := 5 ;
 	var2 := 0;
+	read(var1);
 	read(var2);
 	var3 := (var2 | (var1 | 4 | 5) | 10);
 	write(var3);
