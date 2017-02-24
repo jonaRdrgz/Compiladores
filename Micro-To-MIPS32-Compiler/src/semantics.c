@@ -36,7 +36,7 @@ char * get_label(){
 	static int max_label = 0;
 	static char label[MAXIDLEN];
 
-	sprintf(label, ".label%d", max_label);
+	sprintf(label, "label%d", max_label);
 	max_label++;
 
 	return label;
@@ -154,7 +154,7 @@ void assign(expr_rec target, expr_rec source_expr){
 	}
 
 	if(source_expr.kind == TEMPEXPR && target.kind == TEMPEXPR){
-		fprintf(output, "move %s, %s\n", target.name, extract(source_expr));
+		fprintf(output, "mov %s, %s\n", target.name, source_expr.name);
 	}
 
 }
@@ -164,22 +164,23 @@ void write_jump(char* label, expr_rec expr){
 	char * zero_reg = malloc(3);
 	strcpy(zero_reg, get_temp());
 
-	fprintf(output, "li %s, %d\n", zero_reg, 0);
+	fprintf(output, "mov %s, #%d\n", zero_reg, 0);
 
 	if(expr.kind != TEMPEXPR){
 		char * temp_reg = malloc(3);
 
 		if(expr.kind == LITERALEXPR){
 			strcpy(temp_reg, get_temp());
-			fprintf(output, "li %s, %d\n", temp_reg, expr.val);
+			fprintf(output, "mov %s, #%d\n", temp_reg, expr.val);
 		}else{
 			strcpy(temp_reg, get_temp());
 			fprintf(output, "dldl %s, %s\n", temp_reg, expr.name);
 		}
-
-		fprintf(output, "beq %s, %s, %s\n", temp_reg, zero_reg, label);
+		fprintf(output, "cmp %s, %s\n", temp_reg, zero_reg);
+		fprintf(output, "beq %s\n", label);
 	}else{
-		fprintf(output, "beq %s, %s, %s\n", expr.name, zero_reg, label);
+		fprintf(output, "cmp %s, %s\n", expr.name, zero_reg);
+		fprintf(output, "beq %s\n", label);
 	}
 
 }
@@ -191,7 +192,7 @@ void write_label(char* label){
 
 // Escribe saltos explícitos a etiquetas
 void extrict_jump(char* label){
-	fprintf(output, "j %s\n", label);
+	fprintf(output, "b %s\n", label);
 }
 
 // Procesa los operadores
