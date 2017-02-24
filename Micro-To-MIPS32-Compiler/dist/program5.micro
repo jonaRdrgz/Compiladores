@@ -3,6 +3,6 @@ begin
 	var1 := 5 - (3 + 12);
 	var2 := 0;
 	read(var2);
-	var3 := (var2 | (var1 + 5 | 4 | 5) | 10);
+	var3 := (var2 + 10 | (var1 + 5 | 4 | 5) | 10);
 	write(var3);
 end
