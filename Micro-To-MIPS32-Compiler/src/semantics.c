@@ -116,7 +116,7 @@ void assign(expr_rec target, expr_rec source_expr){
 	}
 
 	if(source_expr.kind == LITERALEXPR && target.kind == TEMPEXPR){
-		fprintf(output, "li %s, %s\n", target.name, extract(source_expr));
+		fprintf(output, "mov  %s, #%s\n", target.name, extract(source_expr));
 	}
 
 	if(source_expr.kind == IDEXPR && target.kind == TEMPEXPR){
@@ -141,11 +141,12 @@ void assign(expr_rec target, expr_rec source_expr){
 			fprintf(tmp_data_segVa,"%s: .word %s\n", target.nameAux, target.name);
 			fprintf(tmp_data_seg,"%s: .word %d\n", target.name, 0);
 		}
-		expr_rec e_rec;
+		/*expr_rec e_rec;
 		char* tmp = get_temp();
 		e_rec.name = malloc(sizeof(tmp));
 
 		strcpy(e_rec.name, tmp);
+		*/
 		char* tmp_reg1 = malloc(3);
 		strcpy(tmp_reg1, get_temp());
 		fprintf(output, "ldr %s, %s\n",tmp_reg1, target.nameAux);
@@ -209,7 +210,6 @@ expr_rec gen_infix(expr_rec e1, op_rec op, expr_rec e2){
 
 	// Constant Folding
 	if(e1.kind == LITERALEXPR && e2.kind == LITERALEXPR){
-
 		e_rec.kind = LITERALEXPR;
 		e_rec.val = (op.operator == PLUS)? e1.val + e2.val : e1.val - e2.val;
 
@@ -261,7 +261,6 @@ expr_rec gen_infix(expr_rec e1, op_rec op, expr_rec e2){
 
 		fprintf(output, "%s %s, %s, %s\n", extract_op(op), e_rec.name, tmp_reg1,tmp_reg2);
 	}
-
 	return e_rec;
 }
 
@@ -332,8 +331,9 @@ expr_rec process_literal(char* token){
 
 // Imprime las expresiones en la consola
 void write_expr(expr_rec out_expr){
-	printf("%s\n",out_expr.name);
-	fprintf(output, "mov r1, %s\n", out_expr.name);
+	if(out_expr.kind == LITERALEXPR) fprintf(output, "mov r1, #%s\n", extract(out_expr));
+	else fprintf(output, "mov r1, %s\n", out_expr.name);
+	
 	fprintf(output, "ldr r0, =format\n");
 	fprintf(output, "bl printf\n");
 }

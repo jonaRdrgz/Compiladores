@@ -138,6 +138,7 @@ void expression(expr_rec *target, int cond_flag){
 
 	token t;
 	int print_flag = 0;
+	int print_flag_write = 0; 
 
 	// Si target es NULL es porque se quiere imprimir.
 	if(target == NULL){
@@ -165,7 +166,13 @@ void expression(expr_rec *target, int cond_flag){
 		*target = tmp_expr;
 	}
 	else{
-		assign(*target, op1);
+		if(print_flag){
+			write_expr(op1);
+			print_flag_write = 1;
+		}else{
+			assign(*target, op1);
+		}
+		
 	}
 
 	// Verifica si es parte de una expresión condicional. Si es 1, lo es, sino 0.
@@ -175,7 +182,9 @@ void expression(expr_rec *target, int cond_flag){
 
 	// Imprime la expresión
 	if(print_flag){
-		write_expr(*target);
+		if(!print_flag_write){
+			write_expr(*target);
+		}
 	}
 
 }
