@@ -59,7 +59,7 @@ addr_var3: .word var3
 .data
 return: .word 0
 format: .asciz "Se imprimio- %d\n"
-var1: .word 2
+var1: .word 15
 var2: .word 0
 var2_scan: .asciz "%d"
 var2_num: .word 0
