@@ -20,26 +20,29 @@ ldr r4, [r4]
 mov r5, #0
 cmp r4, r5
 bne label0
-ldr  r6, addr_var1
-ldr r6, [r6]
-mov r7, #0
-cmp r6, r7
+ldr r7, addr_var1
+ldr r7, [r7]
+mov r8, #5
+add r6, r7, r8
+mov r4, r6
+mov r9, #0
+cmp r4, r9
 bne label2
-mov  r6, #4
+mov  r4, #4
 b label3
 label2:
-mov  r6, #5
+mov  r4, #5
 label3:
-mov r4, r6
+mov r4, r4
 b label1
 label0:
 mov  r4, #10
 label1:
-ldr r8, addr_var3
-str r4, [r8]
-ldr  r0, addr_var3
-ldr r0, [r0]
-mov r1, r0
+ldr r0, addr_var3
+str r4, [r0]
+ldr  r2, addr_var3
+ldr r2, [r2]
+mov r1, r2
 ldr r0, =format
 bl printf
 pop {r4,lr}
