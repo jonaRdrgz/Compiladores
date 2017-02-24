@@ -14,29 +14,26 @@ ldr r0, [r0]
 mov r1, #0
 cmp r0, r1
 bne label0
-ldr r3, addr_var1
-ldr r3, [r3]
-mov r4, #5
-add r2, r3, r4
-mov r0, r2
-mov r5, #0
-cmp r0, r5
+ldr  r2, addr_var1
+ldr r2, [r2]
+mov r3, #0
+cmp r2, r3
 bne label2
-mov  r0, #4
+mov  r2, #4
 b label3
 label2:
-mov  r0, #5
+mov  r2, #5
 label3:
-mov r0, r0
+mov r0, r2
 b label1
 label0:
 mov  r0, #10
 label1:
-ldr r6, addr_var3
-str r0, [r6]
-ldr  r8, addr_var3
-ldr r8, [r8]
-mov r1, r8
+ldr r4, addr_var3
+str r0, [r4]
+ldr  r6, addr_var3
+ldr r6, [r6]
+mov r1, r6
 ldr r0, =format
 bl printf
 pop {r4,lr}
