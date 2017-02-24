@@ -177,10 +177,10 @@ void write_jump(char* label, expr_rec expr){
 			fprintf(output, "dldl %s, %s\n", temp_reg, expr.name);
 		}
 		fprintf(output, "cmp %s, %s\n", temp_reg, zero_reg);
-		fprintf(output, "beq %s\n", label);
+		fprintf(output, "bne %s\n", label);
 	}else{
 		fprintf(output, "cmp %s, %s\n", expr.name, zero_reg);
-		fprintf(output, "beq %s\n", label);
+		fprintf(output, "bne %s\n", label);
 	}
 
 }
