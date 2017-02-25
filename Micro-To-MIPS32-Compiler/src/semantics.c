@@ -109,9 +109,19 @@ void assign(expr_rec target, expr_rec source_expr){
 			fprintf(tmp_data_seg,"%s: .word %s\n", target.name, extract(source_expr));
 		}
 		else{
-			char* tmp_reg = get_temp();
-			fprintf(output, "li %s, %s\n", tmp_reg, extract(source_expr));
-			fprintf(output, "sw %s, %s\n", tmp_reg, target.name);
+			expr_rec e_rec;
+			char* tmp = get_temp();
+			e_rec.name = malloc(sizeof(tmp));
+			strcpy(e_rec.name, tmp);
+			char* tmp_reg1 = malloc(3);
+			strcpy(tmp_reg1, get_temp());
+			fprintf(output, "mov %s, #%s\n", tmp_reg1, extract(source_expr));
+			//fprintf(output, "sw %s, %s\n", tmp_reg, target.name);
+			char* tmp_reg2 = malloc(3);
+			strcpy(tmp_reg2, get_temp());
+			printf("%s\n %s\n",tmp_reg1,tmp_reg2 );
+			fprintf(output, "ldre  %s, %s\n", tmp_reg2, target.nameAux);
+			fprintf(output, "str %s, [%s]\n", tmp_reg1, tmp_reg2);
 		}
 	}
 
@@ -174,7 +184,8 @@ void write_jump(char* label, expr_rec expr){
 			fprintf(output, "mov %s, #%d\n", temp_reg, expr.val);
 		}else{
 			strcpy(temp_reg, get_temp());
-			fprintf(output, "dldl %s, %s\n", temp_reg, expr.name);
+			fprintf(output, "ldr %s, %s\n", temp_reg, expr.nameAux);
+			fprintf(output, "ldr %s, [%s]\n",temp_reg,temp_reg);
 		}
 		fprintf(output, "cmp %s, %s\n", temp_reg, zero_reg);
 		fprintf(output, "bne %s\n", label);
