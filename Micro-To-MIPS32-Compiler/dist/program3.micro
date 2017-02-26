@@ -1,4 +1,4 @@
 -- programa medio 1  + 10 - (8 + 4), 6 - (1 + 3) - 
 begin
-	write(5 + 1 - 2,3 + 3);
+	write(5 + 1 - 2, 3 + 3);
 end
