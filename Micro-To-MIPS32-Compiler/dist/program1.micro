@@ -1,8 +1,0 @@
--- programa facil 1
-begin
-	var2 := 2;
-	var4 := 3;
-	var2 := var2 + var2 + 4 + 6;
-	var2 := var2 + var4;
-	write(var2);
-end

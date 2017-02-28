@@ -1,4 +1,0 @@
--- error sintáctico
-begin
-	write(5 + 10 - - (8 + 4), 6 - (1 + 3) - 1);
-end
