@@ -21,21 +21,6 @@ mov r6, #1
 add r4, r5, r6
 ldr r7, addr_c
 str r4, [r7]
-ldr  r9, addr_var1
-ldr r9, [r9]
-mov r1, r9
-ldr r0, =format
-bl printf
-ldr  r1, addr_d
-ldr r1, [r1]
-mov r1, r1
-ldr r0, =format
-bl printf
-ldr  r3, addr_c
-ldr r3, [r3]
-mov r1, r3
-ldr r0, =format
-bl printf
 pop {r4,lr}
 bx lr
 

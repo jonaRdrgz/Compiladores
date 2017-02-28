@@ -1,0 +1,6 @@
+-- programa facil 1
+begin
+	write(2);
+	var1 := 1;
+	var2 := var1 + 2;
+end

@@ -38,12 +38,12 @@ ldr r5, [r5]
 cmp r5, r4
 bne label2
 mov r7, #4
-ldre  r8, addr_var3
+ldr  r8, addr_var3
 str r7, [r8]
 b label3
 label2:
 mov r0, #5
-ldre  r1, addr_var3
+ldr  r1, addr_var3
 str r0, [r1]
 label3:
 ldr  r2, addr_var3

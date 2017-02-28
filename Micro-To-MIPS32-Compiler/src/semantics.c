@@ -120,7 +120,7 @@ void assign(expr_rec target, expr_rec source_expr){
 			char* tmp_reg2 = malloc(3);
 			strcpy(tmp_reg2, get_temp());
 			printf("%s\n %s\n",tmp_reg1,tmp_reg2 );
-			fprintf(output, "ldre  %s, %s\n", tmp_reg2, target.nameAux);
+			fprintf(output, "ldr  %s, %s\n", tmp_reg2, target.nameAux);
 			fprintf(output, "str %s, [%s]\n", tmp_reg1, tmp_reg2);
 		}
 	}
