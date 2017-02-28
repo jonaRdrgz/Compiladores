@@ -2,9 +2,12 @@
 .global main
 main:
 push {r4,lr}
-mov r1, #2
+
+mov r1, #4
 ldr r0, =format
 bl printf
+
+
 pop {r4,lr}
 bx lr
 

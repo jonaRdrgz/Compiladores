@@ -1,4 +1,0 @@
--- programa facil 1
-begin
-	write(2);
-end
