@@ -1,0 +1,11 @@
+-- programa facil 2
+begin
+	var1 := 0;
+	read(var1);
+	c := 1 + 1;
+	d :=  3+c;
+	c := d +1;
+	write(var1);
+	write(d);
+	write(c);
+end
