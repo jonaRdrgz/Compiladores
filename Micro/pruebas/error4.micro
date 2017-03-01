@@ -1,4 +1,3 @@
--- error sintáctico
 begin
 	var1 := 0
 	read(var1);

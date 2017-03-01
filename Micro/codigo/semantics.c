@@ -1,8 +1,6 @@
 #include "semantics.h"
 #include "parser.h"
 #include <string.h>
-
-// Busca si la variables han sido definidas
 int lookup(char* s){
 	char* symbol;
 	for (int i = 0; i < TABLESIZE; i++)
@@ -15,7 +13,6 @@ int lookup(char* s){
 	return 0;
 }
 
-// Agrega una variable a la tabla de símbolos
 void enter(char * s){
 	static int index = 0;
 	strcpy(symbol_table[index], s);
@@ -30,9 +27,7 @@ char * get_temp(){
 	max_temp++;
 	return tempname;
 }
-
 char * get_label(){
-	/* max label allocated so far */
 	static int max_label = 0;
 	static char label[MAXIDLEN];
 
@@ -62,7 +57,6 @@ void start() {
 }
 
 void finish(){
-	/* Generate code to finish program */
 	fprintf(output,"pop {r4,lr}\n");
 	fprintf(output,"bx lr\n");
 	fprintf(output,"\n");
@@ -71,7 +65,6 @@ void finish(){
 
 	size_t result;
 
-// obtain file size:
 	fseek (tmp_data_labels , 0 , SEEK_END);
 	lSize = ftell (tmp_data_labels);
 	rewind (tmp_data_labels);
@@ -86,24 +79,19 @@ void finish(){
 	fseek (tmp_data , 0 , SEEK_END);
 	lSize = ftell (tmp_data);
 	rewind (tmp_data);
-
-	// allocate memory to contain the whole file:
 	buffer = (char*) malloc (sizeof(char)*lSize);
  	// copy the file into the buffer:
 	result = fread (buffer,1,lSize,tmp_data);
 	if (result != lSize) {fputs ("Reading error",stderr); exit (3);}
 
- 	/* the whole file is now loaded in the memory buffer. */
 	fprintf(output, "%s\n",buffer);
 }
 
 // Asigna valores en el código ensamblador
 void assign(expr_rec target, expr_rec source_expr){
-	/* Generate code for assigment */
 	if(source_expr.kind == LITERALEXPR && target.kind == IDEXPR){
 		if(!lookup(target.name)) {
 			enter(target.name);
-			printf("%s\n", extract(source_expr));
 			fprintf(tmp_data_labels,"%s: .word %s\n", target.nameAux, target.name);
 			fprintf(tmp_data,"%s: .word %s\n", target.name, extract(source_expr));
 		}
@@ -134,14 +122,11 @@ void assign(expr_rec target, expr_rec source_expr){
 	}
 
 	if(source_expr.kind == IDEXPR && target.kind == IDEXPR){
-		char* tmp_reg = get_temp();
 		if(!lookup(target.name)) {
 			enter(target.name);
 			fprintf(tmp_data_labels,"%s: .word %s\n", target.nameAux, target.name);
 			fprintf(tmp_data,"%s: .word %d\n", target.name, 0);
 		}
-		fprintf(output, "lw %s, %s\n", tmp_reg, extract(source_expr));
-		fprintf(output, "sw %s, %s\n", tmp_reg, target.name);
 	}
 
 	if(source_expr.kind == TEMPEXPR && target.kind == IDEXPR){
@@ -190,7 +175,6 @@ void write_jump(char* label, expr_rec expr){
 
 }
 
-// Escribe las etiquetas en el código ensamblador
 void write_label(char* label){
 	fprintf(output, "%s:\n", label);
 }
@@ -200,7 +184,6 @@ void extrict_jump(char* label){
 	fprintf(output, "b %s\n", label);
 }
 
-// Procesa los operadores
 op_rec process_op(){
 	/* Produce operator descriptor */
 	op_rec o;
@@ -220,15 +203,8 @@ expr_rec gen_infix(expr_rec e1, op_rec op, expr_rec e2){
 		e_rec.val = (op.operator == PLUS)? e1.val + e2.val : e1.val - e2.val;
 
 	} else{
-
-		/* An expr_rec with temp variant set */
 		e_rec.kind = TEMPEXPR;
 
-		/*
-		 * Generate code for infix operation.
-		 * Get result temp and set up semantic record
-		 * for result
-		 */
 		char* tmp = get_temp();
 		e_rec.name = malloc(sizeof(tmp));
 
@@ -294,11 +270,6 @@ expr_rec process_id(char* token){
 	expr_rec t;
 	char * zero_reg = malloc(sizeof(token+3));
 	sprintf(zero_reg, "addr_%s", token);
-
-	/*
-	 * Declare ID and build a
-	 * corresponding semantic record.
-	 */
 	t.kind = IDEXPR;
 	t.name = malloc(sizeof(token));
 	t.nameAux = malloc(sizeof(token+3));

@@ -1,4 +1,3 @@
--- Programa complejo 2
 begin
 	--var1 := 0;
 	read(var1);

@@ -15,7 +15,6 @@ mov r2, #50
 add r0, r1, r2
 ldr r3, addr_var2
 str r0, [r3]
-
 ldr r6, addr_var2
 ldr r6, [r6]
 mov r7, #30
@@ -23,7 +22,6 @@ sub r5, r6, r7
 mov r1, r5
 ldr r0, =format
 bl printf
-
 ldr r0, addr_var1
 ldr r0, [r0]
 mov r1, #40

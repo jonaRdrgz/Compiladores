@@ -16,10 +16,6 @@ void program(){
 }
 
 void statement_list(){
-	/*
-	 * <statement_list> ::= <statement>
-	 *						{ <statement> }
-	 */
 	statement();
 	while(true){
 		switch(next_token()){
@@ -40,7 +36,6 @@ void statement(){
 
 	switch(tok) {
 		case ID:
-			/* <statement> ::= ID := <expression> ; */
 			match(ID); 
 			expr_rec id = process_id(token_buffer.token);
 			match(ASSIGNOP);
@@ -49,14 +44,12 @@ void statement(){
 			break;
 
 		case READ:
-			/* <statement> ::= READ ( <id list> ) ; */
 			match(READ); match(LPAREN);
 			id_list(); match(RPAREN); 
 			match(SEMICOLON);
 			break;
 
 		case WRITE:
-			/* <statement> ::= WRITE ( <expr list> ) ; */
 			match(WRITE); match(LPAREN);
 			expr_list(); match(RPAREN);
 			match(SEMICOLON);
@@ -70,7 +63,6 @@ void statement(){
 
 // Verifica la lista de ids para el read
 void id_list(){
-	/* <id list> ::= ID { , ID} */
 	match(ID);
 	
 	if(!lookup(token_buffer.token)){
@@ -114,12 +106,9 @@ void condicional(expr_rec *target, token t){
 		extrict_jump(label2);
 		write_label(label1);
 
-		/*Continua con la expresion*/
 		expression(target, CONDITIONAL_OFF);
 
 		write_label(label2);
-
-		//Free memory
 		free(label1);
 		free(label2);
 	}
@@ -130,7 +119,6 @@ void expression(expr_rec *target, int cond_flag){
 	int print_flag = 0;
 	int print_flag_write = 0; 
 
-	// Si target es NULL es porque se quiere imprimir.
 	if(target == NULL){
 		char* tmp = get_temp();
 		expr_rec tmp_expr = process_temp(tmp);
@@ -165,8 +153,6 @@ void expression(expr_rec *target, int cond_flag){
 		}
 		
 	}
-
-	// Verifica si es parte de una expresión condicional. Si es 1, lo es, sino 0.
 	if(!cond_flag){
 		condicional(target, t);
 	}
@@ -182,7 +168,6 @@ void expression(expr_rec *target, int cond_flag){
 
 //  Verifica una lista de expresiones
 void expr_list(){ 
-	/* <expr list> ::= <expression> { , <expression> } */
 	expression(NULL, CONDITIONAL_OFF);
 
 	while(next_token() == COMMA){
@@ -195,7 +180,6 @@ void expr_list(){
 op_rec add_op(){
 	token tok = next_token();
 	op_rec op;
-	/* <addop> ::= PLUSOP | MINUSOP */
 	if(tok == PLUSOP || tok == MINUSOP){
 		match(tok);
 		op = process_op(token_buffer.token);
@@ -210,13 +194,13 @@ op_rec add_op(){
 // Procesa las expresiones
 expr_rec primary(expr_rec target){
 	token tok = next_token();
-	expr_rec src; 
+	expr_rec source; 
 	switch(tok){
 		case LPAREN:
 	 		/* <primary> ::= ( <expression> ) */
 	 		match(LPAREN); 
 	 		expression(&target, CONDITIONAL_OFF);
-	 		src = target;
+	 		source = target;
 	 		match(RPAREN);
 	 		break;
 	 	case ID:
@@ -225,19 +209,19 @@ expr_rec primary(expr_rec target){
 				semantic_error();
 			}
 	 		match(ID);
-	 		src = process_id(token_buffer.token);
+	 		source = process_id(token_buffer.token);
 	 		break;
 	 	case INTLITERAL:
 	 		/* <primary> ::= INTLITERAL */
 	 		match(INTLITERAL);
-	 		src = process_literal(token_buffer.token);
+	 		source = process_literal(token_buffer.token);
 	 		break;
 	 	default:
 	 		syntax_error();
 	 		break;
 	 }
 
-	 return src;
+	 return source;
 }
 
 // Verifica si el token de la gramática es el mismo que en el programa
@@ -260,8 +244,6 @@ void match(token t){
 		}
 	}
 }
-
-// Obtiene el siguiente token del programa
 token next_token(){
 	token tok;
 	if (tmp_token == NULL){

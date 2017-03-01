@@ -5,12 +5,12 @@ const char* reserved_words[] = {
 	"begin", "end" ,"read", "write"
 };
 
+// Informacion de error (linea en que va)
 line_t line_info = {1, 0};
 
 token scanner(void){
 	int in_char, c;
-	clear_buffer(); //Limpia la estructura del token
-	
+	clear_buffer(); 
 	if(feof(source))
 		return SCANEOF;
 
@@ -123,8 +123,6 @@ void buffer_char(char c){
 	}
 	token_buffer.token[token_buffer.size - 1] = c;
 }
-
-// Limpia el buffer del token
 void clear_buffer(){
 	free(token_buffer.token);
 	token_buffer.token = NULL;
